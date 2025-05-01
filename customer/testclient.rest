@@ -1,0 +1,16 @@
+
+### Book appointment (customer → technician)
+POST http://localhost:8081/customer/book-slot
+Content-Type: application/json
+
+{
+  "customerId": 1,
+  "technicianId": 10,
+  "scheduledTime": "2025-05-15T10:00:00"
+}
+
+### Get appointments by customer
+GET http://localhost:8080/customer/my-appointments?customerId=1
+
+### Get appointments assigned to technician
+GET http://localhost:8080/customer/appointments-for-tech?technicianId=10
