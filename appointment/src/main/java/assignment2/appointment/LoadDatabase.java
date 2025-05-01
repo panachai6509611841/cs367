@@ -13,8 +13,9 @@ public class LoadDatabase {
   @Bean
   CommandLineRunner setupData(AppointmentRepository repository) {
     return args -> {
-      log.info("Loading "+ repository.save(new Technician()));
+      log.info("Loading "+ repository.save(new Technician("Bob","0812546361", "Electician", "10/5/2025", "Booked", "Susan" )));
+      log.info("Loading "+ repository.save(new Technician("Alice","0616521471", "Mechanic", null, "Available" , "Susan")));
     };
-    
+
   }
 }

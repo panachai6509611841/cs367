@@ -2,6 +2,7 @@ package assignment2.appointment;
 
 import java.time.LocalDate;
 import java.time.LocalDateTime;
+import java.time.format.DateTimeFormatter;
 import java.util.ArrayList;
 import java.util.HashMap;
 import java.util.List;
@@ -74,7 +75,8 @@ public class AppointmentController {
         if (technicianOpt.isEmpty()) return ResponseEntity.notFound().build();
 
         Technician technician = technicianOpt.get();
-        LocalDateTime requestedDate = LocalDateTime.parse(payload.get("appointmentDate"));
+        String requestedDate = payload.get("appointmentDate");
+
 
         // ตรวจสอบว่าช่างยังไม่มีนัดที่เวลานั้น
         if (requestedDate.equals(technician.getAppointmentDate())) {
@@ -88,26 +90,27 @@ public class AppointmentController {
         return ResponseEntity.ok("Appointment booked successfully.");
     }
 
-  @PutMapping("/{id}/reschedule")
-    public ResponseEntity<String> rescheduleAppointment(@PathVariable Long id, @RequestBody Map<String, String> payload) {
+    @PutMapping("/{id}/reschedule")
+      public ResponseEntity<String> rescheduleAppointment(@PathVariable Long id, @RequestBody Map<String, String> payload) {
       Optional<Technician> technicianOpt = repository.findById(id);
       if (technicianOpt.isEmpty()) return ResponseEntity.notFound().build();
 
       Technician technician = technicianOpt.get();
-      LocalDateTime newDate = LocalDateTime.parse(payload.get("newAppointmentDate"));
+      DateTimeFormatter formatter = DateTimeFormatter.ofPattern("yyyy-MM-dd'T'HH:mm");
+      LocalDateTime newDate = LocalDateTime.parse(payload.get("newAppointmentDate"), formatter);
+      String formattedDate = newDate.format(formatter);
 
-      // ถ้าเลื่อนไปเวลาที่ตรงกับนัดเดิม
-      if (newDate.equals(technician.getAppointmentDate())) {
+      if (formattedDate.equals(technician.getAppointmentDate())) {
           return ResponseEntity.badRequest().body("New appointment date is the same as current one.");
       }
 
-      // อัปเดตนัดใหม่
-      technician.setAppointmentDate(newDate);
+      technician.setAppointmentDate(formattedDate);
       technician.setStatus("BOOKED");
       repository.save(technician);
 
-      return ResponseEntity.ok("Appointment rescheduled to " + newDate.toString());
-  }
+      return ResponseEntity.ok("Appointment rescheduled to " + formattedDate);
+  } 
+
   @PutMapping("/{id}/cancel")
     public ResponseEntity<String> cancelAppointment(@PathVariable Long id) {
       Optional<Technician> technicianOpt = repository.findById(id);

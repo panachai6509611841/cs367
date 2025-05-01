@@ -1,0 +1,28 @@
+### ดึงข้อมูลช่างทั้งหมด
+GET http://localhost:8080/technicians
+
+### ดูเวลาว่างของช่าง ID = 1
+GET http://localhost:8080/1/available-slots
+
+### ดูตารางนัดของช่าง ID = 1
+GET http://localhost:8080/1/schedule
+
+### จองนัดให้ช่าง ID = 1
+POST http://localhost:8080/1/book
+Content-Type: application/json
+
+{
+    "appointmentDate": "2025-05-01T10:00",
+    "customerName": "Alice"
+}
+
+### เลื่อนนัดให้ช่าง ID = 1
+PUT http://localhost:8080/1/reschedule
+Content-Type: application/json
+
+{
+    "newAppointmentDate": "2025-05-02T14:00"
+}
+
+### ยกเลิกนัดของช่าง ID = 1
+PUT http://localhost:8080/1/cancel

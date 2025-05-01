@@ -1,7 +1,5 @@
 package assignment2.appointment;
 
-import java.time.LocalDateTime;
-
 import jakarta.persistence.Entity;
 import jakarta.persistence.GeneratedValue;
 import jakarta.persistence.Id;
@@ -12,17 +10,19 @@ public class Technician {
     private String name;
     private String phone;
     private String expertise;
-    private LocalDateTime appointmentDate;
-    private String status; 
+    private String appointmentDate;
+    private String status;
+    private String customerName; 
 
     Technician() {}
 
-    Technician(String name, String phone, String expertise, LocalDateTime appointmentDate, String status) {
+    Technician(String name, String phone, String expertise, String appointmentDate, String status, String customerName) {
         this.name = name;
         this.phone = phone;
         this.expertise = expertise;
         this.appointmentDate = appointmentDate;
         this.status = status;
+        this.customerName = customerName;
     }
 
     public Long getId() {
@@ -57,11 +57,11 @@ public class Technician {
         this.expertise = expertise;
     }
 
-    public LocalDateTime getAppointmentDate() {
+    public String getAppointmentDate() {
         return appointmentDate;
     }
 
-    public void setAppointmentDate(LocalDateTime appointmentDate) {
+    public void setAppointmentDate(String appointmentDate) {
         this.appointmentDate = appointmentDate;
     }
 
@@ -73,10 +73,12 @@ public class Technician {
         this.status = status;
     }
 
+    
     @Override
     public String toString() {
         return "Technician [id=" + id + ", name=" + name + ", phone=" + phone + ", expertise=" + expertise
-                + ", appointmentDate=" + appointmentDate + ", status=" + status + "]";
+                + ", appointmentDate=" + appointmentDate + ", status=" + status + ", customerName=" + customerName
+                + "]";
     }
 
     @Override
@@ -89,6 +91,7 @@ public class Technician {
         result = prime * result + ((expertise == null) ? 0 : expertise.hashCode());
         result = prime * result + ((appointmentDate == null) ? 0 : appointmentDate.hashCode());
         result = prime * result + ((status == null) ? 0 : status.hashCode());
+        result = prime * result + ((customerName == null) ? 0 : customerName.hashCode());
         return result;
     }
 
@@ -131,9 +134,23 @@ public class Technician {
                 return false;
         } else if (!status.equals(other.status))
             return false;
+        if (customerName == null) {
+            if (other.customerName != null)
+                return false;
+        } else if (!customerName.equals(other.customerName))
+            return false;
         return true;
     }
 
+    public String getCustomerName() {
+        return customerName;
+    }
+
+    public void setCustomerName(String customerName) {
+        this.customerName = customerName;
+    }
+
+    
     
 
 }
