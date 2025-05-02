@@ -1,33 +1,36 @@
 ### Get all technicians
 GET http://localhost:8080/technicians
 
-### Search technicians by expertise (example: electrician)
-GET http://localhost:8080/search/electrician
+### Search technicians by expertise 
+GET http://localhost:8080/search/Electrician
 
-### Search technicians by name (example: John)
-GET http://localhost:8080/search?name=John
+### Search technicians by name 
+GET http://localhost:8080/search?name=Max
 
-### Search technicians by ID (example: 1)
+### Search technicians by ID 
 GET http://localhost:8080/search?id=1
 
-### Book appointment for technician with ID 1
-POST http://localhost:8080/1/book
+### Search technicians by ID 
+GET http://localhost:8080/search?id=2
+
+### Book appointment for technician with ID 
+POST http://localhost:8080/2/book
 Content-Type: application/json
 
 {
   "appointmentDate": "05/05/2025",
-  "customerName": "Alice"
+  "customerName": "Betty"
 }
 
-### Book appointment with missing fields (should fail)
-POST http://localhost:8080/2/book
+### Book appointment with missing fields 
+POST http://localhost:8080/3/book
 Content-Type: application/json
 
 {
   "appointmentDate": "01/05/2025"
 }
 
-### Try booking again for same technician (should return error)
+### Try booking again for same technician 
 POST http://localhost:8080/1/book
 Content-Type: application/json
 
@@ -35,3 +38,5 @@ Content-Type: application/json
   "appointmentDate": "03/05/2025",
   "customerName": "Bob"
 }
+
+
