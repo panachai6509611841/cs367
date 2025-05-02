@@ -5,7 +5,6 @@ import jakarta.persistence.GeneratedValue;
 import jakarta.persistence.Id;
 
 @Entity
-
 public class Customer {
   private @Id @GeneratedValue Long id;
   private String customerName;
@@ -14,7 +13,7 @@ public class Customer {
   private String appointmentDates;
   private String technicianID;
 
-  Customer() {}
+  public Customer() {}
 
   public Long getId() {
     return id;

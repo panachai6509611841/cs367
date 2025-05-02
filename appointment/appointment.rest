@@ -13,30 +13,13 @@ GET http://localhost:8081/search?id=1
 ### Search technicians by ID 
 GET http://localhost:8081/search?id=2
 
-### Book appointment for technician with ID 
-POST http://localhost:8081/2/book
+
+
+###ดูสถานที่ของลูกค้า
+GET http://localhost:8080/technician-access/location?customerName=Simon
 Content-Type: application/json
 
-{
-  "appointmentDate": "05/05/2025",
-  "customerName": "Betty"
-}
 
-### Book appointment with missing fields 
-POST http://localhost:8081/3/book
+### DELETE การจองนัด 
+DELETE http://localhost:8081/delete/cancel-booking-tech?technicianId=2&customerName=Betty
 Content-Type: application/json
-
-{
-  "appointmentDate": "01/05/2025"
-}
-
-### Try booking again for same technician 
-POST http://localhost:8081/1/book
-Content-Type: application/json
-
-{
-  "appointmentDate": "03/05/2025",
-  "customerName": "Tan"
-}
-
-

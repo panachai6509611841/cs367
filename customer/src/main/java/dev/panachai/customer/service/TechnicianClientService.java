@@ -8,13 +8,19 @@ import org.springframework.http.HttpMethod;
 import org.springframework.http.ResponseEntity;
 import org.springframework.stereotype.Service;
 import org.springframework.web.client.RestTemplate;
+import dev.panachai.customer.repository.*;
+import dev.panachai.customer.model.*;
 
 @Service
 public class TechnicianClientService {
     
+
     private final RestTemplate rest ;
-    public TechnicianClientService(RestTemplate rest) {
+    private final CustomerRepository customerRepo;
+
+    public TechnicianClientService(RestTemplate rest, CustomerRepository customerRepo) {
         this.rest = rest;
+        this.customerRepo = customerRepo;
     }
 
     public List<Map<String, Object>> getAllTechnicians() {
@@ -40,12 +46,24 @@ public List<Map<String, Object>> searchByExpertise(String expertise) {
     );
     return response.getBody();
 }
-public String bookAppointment(Long techId, String date, String customerName) {
+public String bookAndSaveAppointment(Long techId, String date, String customerName, String customerPhone, String location) {
+    // Step 1: เรียก Technician Service เพื่อจอง
     String url = "http://localhost:8081/" + techId + "/book";
     Map<String, String> payload = Map.of(
         "appointmentDate", date,
         "customerName", customerName
     );
-    return rest.postForObject(url, payload, String.class);
+    String response = rest.postForObject(url, payload, String.class);
+
+    // Step 2: บันทึกลง DB ฝั่งลูกค้า
+    Customer c = new Customer();
+    c.setCustomerName(customerName);
+    c.setCustomerPhone(customerPhone);
+    c.setLocation(location);
+    c.setAppointmentDates(date); // String format เช่น "2025-05-15T10:00"
+    c.setTechnicianID(String.valueOf(techId)); // ต้องแปลงเป็น String
+    customerRepo.save(c);
+
+    return response;
 }
 }

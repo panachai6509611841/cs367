@@ -1,8 +1,11 @@
 package assignment2.appointment;
 
+import java.util.HashSet;
 import java.util.List;
 import java.util.Map;
 import java.util.Optional;
+import java.util.Set;
+import java.util.stream.Collectors;
 
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.http.ResponseEntity;
@@ -30,10 +33,31 @@ public class AppointmentController {
     }
 
     // 1. ค้นหาช่างจากความถนัด
-    @GetMapping("/search/{expertise}")
-    public List<Technician> findByExpertise(@PathVariable String expertise) {
-        return repository.findByExpertiseContainingIgnoreCase(expertise);
+   @GetMapping("/search/{expertise}")
+   public String findUniqueByExpertise(@PathVariable String expertise) {
+    List<Technician> all = repository.findByExpertiseContainingIgnoreCase(expertise);
+    Set<String> seen = new HashSet<>();
+
+    List<Technician> unique = all.stream()
+        .filter(t -> seen.add(t.getTechnicianID()))
+        .collect(Collectors.toList());
+
+    if (unique.isEmpty()) {
+        return "Can't Find: " + expertise;
     }
+
+    StringBuilder sb = new StringBuilder("[ Search results for technician ] '" + expertise + "'\n\n");
+    for (Technician t : unique) {
+        sb.append("   Technician ID : ").append(t.getTechnicianID()).append("\n")
+          .append("   Name : ").append(t.getName()).append("\n")
+          .append("   Phone : ").append(t.getPhone()).append("\n")
+          .append("   Expertise : ").append(t.getExpertise()).append("\n")
+          .append("   -----------------------------\n");
+    }
+
+    return sb.toString();
+}
+
 
     // 2. ค้นหาช่างจากชื่อหรือไอดี
     @GetMapping("/search")
@@ -50,7 +74,7 @@ public class AppointmentController {
             return ResponseEntity.badRequest().body("Please provide either id or name.");
         }
     }
-
+    //จอง
     @PostMapping("/{technicianID}/book")
     public ResponseEntity<String> bookAppointment(
     @PathVariable String technicianID,

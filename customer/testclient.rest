@@ -1,42 +1,22 @@
 
-### Book appointment (customer → technician)
-POST http://localhost:8080/customer/book-slot
-Content-Type: application/json
-
-{
-  "customerId": 1,
-  "technicianId": 10,
-  "scheduledTime": "2025-05-15T10:00:00"
-}
-
-### Get appointments by customer
-GET http://localhost:8080/customer/my-appointments?customerId=1
-
-### Get appointments assigned to technician
-GET http://localhost:8080/customer/appointments-for-tech?technicianId=10
-
+// API จาก  Tech
 ### ข้อ 1 : Type 3
 GET http://localhost:8081/search/Electrician
 
 ### type 2
-POST http://localhost:8081/2/book
+POST http://localhost:8080/customer/book-and-track/2
 Content-Type: application/json
 
 {
-  "appointmentDate": "05/05/2025",
-  "customerName": "Betty"
+  "customerName": "Betty",
+  "customerPhone": "0812345678",
+  "location": "บ้านเลขที่ 99",
+  "appointmentDate": "20/02/2024"
 }
 
 
-
+//API ตัวเอง
 ### 1. ยกเลิกการจองนัดของลูกค้า (โดย technicianId และ customerId)
 DELETE http://localhost:8080/technician-access/cancel-booking?technicianId=1&customerId=2
 Content-Type: application/json
 
-###
-
-### 2. ดูสถานที่ของลูกค้า
-GET http://localhost:8080/technician-access/location/2
-Content-Type: application/json
-
-###
