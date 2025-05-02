@@ -18,7 +18,7 @@ public class LoadDatabaseCustomer {
       log.info("Loading "+ repository.save(new Customer( "Simon","0812546361", "Rangsit", "10/5/2025", "1" )));
       log.info("Loading "+ repository.save(new Customer( "Blue","0812546361", "Bangkok", "9/5/2025", "1" )));
       log.info("Loading "+ repository.save(new Customer( "Pop","0812546361", "Bangkok", "10/5/2025", "3" )));
-      log.info("Loading "+ repository.save(new Customer( "Laura","0812546361", "Bangkok", "5/5/2025", "4" )));
+      log.info("Loading "+ repository.save(new Customer( "Laura","0812546361", "Bangkok", "5/5/2025", "3" )));
     };
 
   }
