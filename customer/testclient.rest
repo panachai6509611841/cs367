@@ -14,3 +14,15 @@ GET http://localhost:8080/customer/my-appointments?customerId=1
 
 ### Get appointments assigned to technician
 GET http://localhost:8080/customer/appointments-for-tech?technicianId=10
+
+### ข้อ 1 : Type 3
+GET http://localhost:8081/search/Electrician
+
+### type 2
+POST http://localhost:8081/2/book
+Content-Type: application/json
+
+{
+  "appointmentDate": "05/05/2025",
+  "customerName": "Betty"
+}
