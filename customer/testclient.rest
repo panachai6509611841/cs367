@@ -26,3 +26,17 @@ Content-Type: application/json
   "appointmentDate": "05/05/2025",
   "customerName": "Betty"
 }
+
+
+
+### 1. ยกเลิกการจองนัดของลูกค้า (โดย technicianId และ customerId)
+DELETE http://localhost:8080/technician-access/cancel-booking?technicianId=1&customerId=2
+Content-Type: application/json
+
+###
+
+### 2. ดูสถานที่ของลูกค้า
+GET http://localhost:8080/technician-access/location/2
+Content-Type: application/json
+
+###
