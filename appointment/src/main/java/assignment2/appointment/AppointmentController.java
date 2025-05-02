@@ -1,22 +1,17 @@
 package assignment2.appointment;
 
-import java.time.LocalDate;
-import java.time.LocalDateTime;
-import java.time.format.DateTimeFormatter;
-import java.util.ArrayList;
-import java.util.HashMap;
 import java.util.List;
 import java.util.Map;
 import java.util.Optional;
 
-import org.springframework.web.bind.annotation.RestController;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.http.ResponseEntity;
 import org.springframework.web.bind.annotation.GetMapping;
 import org.springframework.web.bind.annotation.PathVariable;
 import org.springframework.web.bind.annotation.PostMapping;
-import org.springframework.web.bind.annotation.PutMapping;
 import org.springframework.web.bind.annotation.RequestBody;
+import org.springframework.web.bind.annotation.RequestParam;
+import org.springframework.web.bind.annotation.RestController;
 
 
 @RestController
@@ -34,101 +29,51 @@ public class AppointmentController {
         return repository.findAll();
     }
 
-  @GetMapping("/{id}/available-slots")
-    public ResponseEntity<List<LocalDateTime>> getAvailableSlots(@PathVariable Long id) {
-        Optional<Technician> technicianOpt = repository.findById(id);
-        if (technicianOpt.isEmpty()) return ResponseEntity.notFound().build();
+    // 1. ค้นหาช่างจากความถนัด
+    @GetMapping("/search/expertise/{expertise}")
+    public List<Technician> findByExpertise(@PathVariable String expertise) {
+        return repository.findByExpertiseContainingIgnoreCase(expertise);
+    }
 
-        Technician technician = technicianOpt.get();
-        List<LocalDateTime> availableSlots = new ArrayList<>();
-
-        LocalDate today = LocalDate.now();
-        for (int day = 0; day < 7; day++) {
-            LocalDate date = today.plusDays(day);
-            for (int hour = 9; hour < 17; hour++) {
-                LocalDateTime slot = date.atTime(hour, 0);
-                if (!slot.equals(technician.getAppointmentDate())) {
-                    availableSlots.add(slot);
-                }
-            }
+    // 2. ค้นหาช่างจากชื่อหรือไอดี
+    @GetMapping("/search")
+    public ResponseEntity<?> findByNameOrId(@RequestParam(required = false) Long id,
+                                            @RequestParam(required = false) String name) {
+        if (id != null) {
+            Optional<Technician> tech = repository.findById(id);
+            return tech.map(ResponseEntity::ok)
+                       .orElse(ResponseEntity.notFound().build());
+        } else if (name != null) {
+            List<Technician> list = repository.findByNameContainingIgnoreCase(name);
+            return ResponseEntity.ok(list);
+        } else {
+            return ResponseEntity.badRequest().body("Please provide either id or name.");
         }
-        return ResponseEntity.ok(availableSlots);
     }
-  
-  @GetMapping("/{id}/schedule")
-    public ResponseEntity<Map<String, Object>> getTechnicianSchedule(@PathVariable Long id) {
-        Optional<Technician> technicianOpt = repository.findById(id);
-        if (technicianOpt.isEmpty()) return ResponseEntity.notFound().build();
 
-        Technician technician = technicianOpt.get();
-        Map<String, Object> schedule = new HashMap<>();
-        schedule.put("technician", technician.getName());
-        schedule.put("appointment", technician.getAppointmentDate());
-        schedule.put("status", technician.getStatus());
-
-        return ResponseEntity.ok(schedule);
-    }
-    
-  @PostMapping("/{id}/book")
+    // 3. จองนัด (ถ้ายังไม่มีนัด)
+    @PostMapping("/{id}/book")
     public ResponseEntity<String> bookAppointment(@PathVariable Long id, @RequestBody Map<String, String> payload) {
         Optional<Technician> technicianOpt = repository.findById(id);
         if (technicianOpt.isEmpty()) return ResponseEntity.notFound().build();
 
         Technician technician = technicianOpt.get();
-        String requestedDate = payload.get("appointmentDate");
 
-
-        // ตรวจสอบว่าช่างยังไม่มีนัดที่เวลานั้น
-        if (requestedDate.equals(technician.getAppointmentDate())) {
-            return ResponseEntity.badRequest().body("Technician already booked at this time.");
+        if (technician.getAppointmentDate() != null) {
+            return ResponseEntity.badRequest().body("Technician already has an appointment.");
         }
 
-        technician.setAppointmentDate(requestedDate);
-        technician.setStatus("BOOKED");
+        String appointmentDate = payload.get("appointmentDate");
+        String customerName = payload.get("customerName");
+
+        if (appointmentDate == null || customerName == null) {
+            return ResponseEntity.badRequest().body("Missing appointmentDate or customerName.");
+        }
+
+        technician.setAppointmentDate(appointmentDate);
+        technician.setCustomerName(customerName);
         repository.save(technician);
 
-        return ResponseEntity.ok("Appointment booked successfully.");
+        return ResponseEntity.ok("Appointment booked for " + customerName + " at " + appointmentDate);
     }
-
-    @PutMapping("/{id}/reschedule")
-      public ResponseEntity<String> rescheduleAppointment(@PathVariable Long id, @RequestBody Map<String, String> payload) {
-      Optional<Technician> technicianOpt = repository.findById(id);
-      if (technicianOpt.isEmpty()) return ResponseEntity.notFound().build();
-
-      Technician technician = technicianOpt.get();
-      DateTimeFormatter formatter = DateTimeFormatter.ofPattern("yyyy-MM-dd'T'HH:mm");
-      LocalDateTime newDate = LocalDateTime.parse(payload.get("newAppointmentDate"), formatter);
-      String formattedDate = newDate.format(formatter);
-
-      if (formattedDate.equals(technician.getAppointmentDate())) {
-          return ResponseEntity.badRequest().body("New appointment date is the same as current one.");
-      }
-
-      technician.setAppointmentDate(formattedDate);
-      technician.setStatus("BOOKED");
-      repository.save(technician);
-
-      return ResponseEntity.ok("Appointment rescheduled to " + formattedDate);
-  } 
-
-  @PutMapping("/{id}/cancel")
-    public ResponseEntity<String> cancelAppointment(@PathVariable Long id) {
-      Optional<Technician> technicianOpt = repository.findById(id);
-      if (technicianOpt.isEmpty()) return ResponseEntity.notFound().build();
-  
-      Technician technician = technicianOpt.get();
-      
-      // ถ้ายังไม่มีการนัดหมาย
-      if (technician.getAppointmentDate() == null || technician.getStatus().equalsIgnoreCase("AVAILABLE")) {
-          return ResponseEntity.badRequest().body("Technician has no active appointment to cancel.");
-      }
-  
-      // ยกเลิกนัดหมาย
-      technician.setAppointmentDate(null);
-      technician.setStatus("AVAILABLE");
-      repository.save(technician);
-  
-      return ResponseEntity.ok("Appointment cancelled successfully.");
-  }
-  
 }

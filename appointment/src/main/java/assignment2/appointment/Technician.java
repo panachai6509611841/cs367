@@ -11,17 +11,15 @@ public class Technician {
     private String phone;
     private String expertise;
     private String appointmentDate;
-    private String status;
     private String customerName; 
 
     Technician() {}
 
-    Technician(String name, String phone, String expertise, String appointmentDate, String status, String customerName) {
+    Technician(String name, String phone, String expertise, String appointmentDate, String customerName) {
         this.name = name;
         this.phone = phone;
         this.expertise = expertise;
         this.appointmentDate = appointmentDate;
-        this.status = status;
         this.customerName = customerName;
     }
 
@@ -65,19 +63,11 @@ public class Technician {
         this.appointmentDate = appointmentDate;
     }
 
-    public String getStatus() {
-        return status;
-    }
-
-    public void setStatus(String status) {
-        this.status = status;
-    }
-
     
     @Override
     public String toString() {
         return "Technician [id=" + id + ", name=" + name + ", phone=" + phone + ", expertise=" + expertise
-                + ", appointmentDate=" + appointmentDate + ", status=" + status + ", customerName=" + customerName
+                + ", appointmentDate=" + appointmentDate + ", customerName=" + customerName
                 + "]";
     }
 
@@ -90,7 +80,6 @@ public class Technician {
         result = prime * result + ((phone == null) ? 0 : phone.hashCode());
         result = prime * result + ((expertise == null) ? 0 : expertise.hashCode());
         result = prime * result + ((appointmentDate == null) ? 0 : appointmentDate.hashCode());
-        result = prime * result + ((status == null) ? 0 : status.hashCode());
         result = prime * result + ((customerName == null) ? 0 : customerName.hashCode());
         return result;
     }
@@ -129,11 +118,6 @@ public class Technician {
                 return false;
         } else if (!appointmentDate.equals(other.appointmentDate))
             return false;
-        if (status == null) {
-            if (other.status != null)
-                return false;
-        } else if (!status.equals(other.status))
-            return false;
         if (customerName == null) {
             if (other.customerName != null)
                 return false;
@@ -149,8 +133,5 @@ public class Technician {
     public void setCustomerName(String customerName) {
         this.customerName = customerName;
     }
-
-    
-    
 
 }
