@@ -1,0 +1,21 @@
+{
+  "configurations": [
+    {
+      "type": "java",
+      "name": "AppointmentApplication",
+      "request": "launch",
+      "mainClass": "assignment2.appointment.AppointmentApplication",
+      "projectName": "appointment"
+    },
+    {
+      "type": "java",
+      "name": "Spring Boot-CustomerApplication<customer>",
+      "request": "launch",
+      "cwd": "${workspaceFolder}",
+      "mainClass": "dev.panachai.customer.CustomerApplication",
+      "projectName": "customer",
+      "args": "",
+      "envFile": "${workspaceFolder}/.env"
+    }
+  ]
+}

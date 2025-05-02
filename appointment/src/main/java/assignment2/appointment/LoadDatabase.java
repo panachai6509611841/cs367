@@ -1,8 +1,5 @@
 package assignment2.appointment;
 
-import java.util.ArrayList;
-import java.util.List;
-
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
 import org.springframework.boot.CommandLineRunner;
@@ -16,10 +13,12 @@ public class LoadDatabase {
   @Bean
   CommandLineRunner setupData(AppointmentRepository repository) {
     return args -> {
-      log.info("Loading "+ repository.save(new Technician( "Bob","0812546361", "Electrician", List.of("10/5/2025"), List.of("Susan") )));
-      log.info("Loading "+ repository.save(new Technician("Alice","0616521471", "Mechanic", new ArrayList<>(), new ArrayList<>())));
-      log.info("Loading "+ repository.save(new Technician("Max","0812546361", "Electrician", new ArrayList<>(), new ArrayList<>() )));
-      log.info("Loading "+ repository.save(new Technician("Nick","0616521471", "Engine", new ArrayList<>(), new ArrayList<>())));
+      log.info("Loading "+ repository.save(new Technician( "1","Bob","0812546361", "Electrician", "9/10/2025" ,"Blue" )));
+      log.info("Loading "+ repository.save(new Technician( "1","Bob","0812546361", "Electrician",  "10/5/2025", "Simon" )));
+      log.info("Loading "+ repository.save(new Technician("2","Alice","0616521471", "Mechanic", null, null)));
+      log.info("Loading "+ repository.save(new Technician("3", "Max","0812546361", "Electrician", "10/10/2025", "Pop" )));
+      log.info("Loading "+ repository.save(new Technician( "3","Max","0812546361", "Electrician", "5/10/2025", "Laura" )));
+      log.info("Loading "+ repository.save(new Technician("4","Milk","0616521471", "Mechanic", null, null)));
     };
 
   }

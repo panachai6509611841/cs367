@@ -1,9 +1,5 @@
 package assignment2.appointment;
 
-import java.util.ArrayList;
-import java.util.List;
-
-import jakarta.persistence.ElementCollection;
 import jakarta.persistence.Entity;
 import jakarta.persistence.GeneratedValue;
 import jakarta.persistence.Id;
@@ -11,32 +7,23 @@ import jakarta.persistence.Id;
 @Entity
 public class Technician {
     private @Id @GeneratedValue Long id;
+    private String technicianID;
     private String name;
     private String phone;
     private String expertise;
-    
-    @ElementCollection
-    private List<String> appointmentDates = new ArrayList<>();
-    @ElementCollection
-    private List<String> customerNames = new ArrayList<>();
-
+    private String appointmentDate;
+    private String customerName; 
 
     Technician() {}
 
-    public List<String> getAppointmentDates() {
-        return appointmentDates;
-    }
-
-    public void setAppointmentDates(List<String> appointmentDates) {
-        this.appointmentDates = appointmentDates;
-    }
-
-    public List<String> getCustomerNames() {
-        return customerNames;
-    }
-
-    public void setCustomerNames(List<String> customerNames) {
-        this.customerNames = customerNames;
+    public Technician(String technicianID, String name, String phone, String expertise, String appointmentDate,
+            String customerName) {
+        this.technicianID = technicianID;
+        this.name = name;
+        this.phone = phone;
+        this.expertise = expertise;
+        this.appointmentDate = appointmentDate;
+        this.customerName = customerName;
     }
 
     public Long getId() {
@@ -70,11 +57,21 @@ public class Technician {
     public void setExpertise(String expertise) {
         this.expertise = expertise;
     }
+
+    public String getAppointmentDate() {
+        return appointmentDate;
+    }
+
+    public void setAppointmentDate(String appointmentDate) {
+        this.appointmentDate = appointmentDate;
+    }
+
     
     @Override
     public String toString() {
-        return "Technician [id=" + id + ", name=" + name + ", phone=" + phone + ", expertise=" + expertise
-                + ", appointmentDates=" + appointmentDates + ", customerNames=" + customerNames + "]";
+        return "Technician [id=" + id + ", technicianID=" + technicianID + ", name=" + name + ", phone=" + phone
+                + ", expertise=" + expertise + ", appointmentDate=" + appointmentDate + ", customerName=" + customerName
+                + "]";
     }
 
     @Override
@@ -82,11 +79,12 @@ public class Technician {
         final int prime = 31;
         int result = 1;
         result = prime * result + ((id == null) ? 0 : id.hashCode());
+        result = prime * result + ((technicianID == null) ? 0 : technicianID.hashCode());
         result = prime * result + ((name == null) ? 0 : name.hashCode());
         result = prime * result + ((phone == null) ? 0 : phone.hashCode());
         result = prime * result + ((expertise == null) ? 0 : expertise.hashCode());
-        result = prime * result + ((appointmentDates == null) ? 0 : appointmentDates.hashCode());
-        result = prime * result + ((customerNames == null) ? 0 : customerNames.hashCode());
+        result = prime * result + ((appointmentDate == null) ? 0 : appointmentDate.hashCode());
+        result = prime * result + ((customerName == null) ? 0 : customerName.hashCode());
         return result;
     }
 
@@ -104,6 +102,11 @@ public class Technician {
                 return false;
         } else if (!id.equals(other.id))
             return false;
+        if (technicianID == null) {
+            if (other.technicianID != null)
+                return false;
+        } else if (!technicianID.equals(other.technicianID))
+            return false;
         if (name == null) {
             if (other.name != null)
                 return false;
@@ -119,28 +122,37 @@ public class Technician {
                 return false;
         } else if (!expertise.equals(other.expertise))
             return false;
-        if (appointmentDates == null) {
-            if (other.appointmentDates != null)
+        if (appointmentDate == null) {
+            if (other.appointmentDate != null)
                 return false;
-        } else if (!appointmentDates.equals(other.appointmentDates))
+        } else if (!appointmentDate.equals(other.appointmentDate))
             return false;
-        if (customerNames == null) {
-            if (other.customerNames != null)
+        if (customerName == null) {
+            if (other.customerName != null)
                 return false;
-        } else if (!customerNames.equals(other.customerNames))
+        } else if (!customerName.equals(other.customerName))
             return false;
         return true;
     }
 
-    public Technician( String name, String phone, String expertise, List<String> appointmentDates,
-            List<String> customerNames) {
-        this.name = name;
-        this.phone = phone;
-        this.expertise = expertise;
-        this.appointmentDates = appointmentDates;
-        this.customerNames = customerNames;
+    public String getCustomerName() {
+        return customerName;
+    }
+
+    public void setCustomerName(String customerName) {
+        this.customerName = customerName;
     }
 
 
+
+    public String getTechnicianID() {
+        return technicianID;
+    }
+
+
+
+    public void setTechnicianID(String technicianID) {
+        this.technicianID = technicianID;
+    }
 
 }

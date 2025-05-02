@@ -51,36 +51,41 @@ public class AppointmentController {
         }
     }
 
-    @PostMapping("/{id}/book")
-    public ResponseEntity<String> bookAppointment(@PathVariable Long id, @RequestBody Map<String, String> payload) {
-        Optional<Technician> technicianOpt = repository.findById(id);
-        if (technicianOpt.isEmpty()) return ResponseEntity.notFound().build();
-    
-        Technician technician = technicianOpt.get();
-    
-        String appointmentDate = payload.get("appointmentDate");
-        String customerName = payload.get("customerName");
-    
-        if (appointmentDate == null || customerName == null) {
-            return ResponseEntity.badRequest().body("Missing appointmentDate or customerName.");
-        }
-    
-        List<String> dates = technician.getAppointmentDates();
-        if (dates.contains(appointmentDate)) {
-            return ResponseEntity.badRequest().body("Technician is already booked at " + appointmentDate);
-        }
-    
-        technician.getAppointmentDates().add(appointmentDate);
-        technician.getCustomerNames().add(customerName);
-        repository.save(technician);
-    
-        return ResponseEntity.ok(
-            "Appointment booked for customer '" + customerName +
-            "' with technician '" + technician.getName() +
-            "' (ID: " + technician.getId() +
-            ") at " + appointmentDate
-        );
+    @PostMapping("/{technicianID}/book")
+    public ResponseEntity<String> bookAppointment(
+    @PathVariable String technicianID,
+    @RequestBody Map<String, String> payload
+    ) {
+    List<Technician> technicians = repository.findByTechnicianID(technicianID);
+    if (technicians.isEmpty()) {
+        return ResponseEntity.notFound().build();
     }
+
+    // เลือก technician รายแรก หรือ implement logic เพื่อเลือกให้ถูกต้อง
+    Technician technician = technicians.get(0);  // 👈 อาจใช้ logic อื่นแทน
+
+    String appointmentDate = payload.get("appointmentDate");
+    String customerName = payload.get("customerName");
+
+    if (appointmentDate == null || customerName == null) {
+        return ResponseEntity.badRequest().body("Missing appointmentDate or customerName.");
+    }
+
+    // เพิ่ม technician ใหม่เป็นรอบใหม่
+    Technician newAppointment = new Technician(
+        technicianID,
+        technician.getName(),
+        technician.getPhone(),
+        technician.getExpertise(),
+        appointmentDate,
+        customerName
+    );
+
+    repository.save(newAppointment);
+
+    return ResponseEntity.ok("Appointment booked for technicianID: " + technicianID + " at " + appointmentDate);
+}
+
     
 
 }
