@@ -14,6 +14,7 @@ public class Technician {
     private String name;
     private String phone;
     private String expertise;
+    
     @ElementCollection
     private List<String> appointmentDates = new ArrayList<>();
     @ElementCollection
