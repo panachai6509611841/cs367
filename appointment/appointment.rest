@@ -1,28 +1,37 @@
-### ดึงข้อมูลช่างทั้งหมด
+### Get all technicians
 GET http://localhost:8080/technicians
 
-### ดูเวลาว่างของช่าง ID = 1
-GET http://localhost:8080/1/available-slots
+### Search technicians by expertise (example: electrician)
+GET http://localhost:8080/search/electrician
 
-### ดูตารางนัดของช่าง ID = 1
-GET http://localhost:8080/1/schedule
+### Search technicians by name (example: John)
+GET http://localhost:8080/search?name=John
 
-### จองนัดให้ช่าง ID = 1
+### Search technicians by ID (example: 1)
+GET http://localhost:8080/search?id=1
+
+### Book appointment for technician with ID 1
 POST http://localhost:8080/1/book
 Content-Type: application/json
 
 {
-    "appointmentDate": "2025-05-01T10:00",
-    "customerName": "Alice"
+  "appointmentDate": "05/05/2025",
+  "customerName": "Alice"
 }
 
-### เลื่อนนัดให้ช่าง ID = 1
-PUT http://localhost:8080/1/reschedule
+### Book appointment with missing fields (should fail)
+POST http://localhost:8080/2/book
 Content-Type: application/json
 
 {
-    "newAppointmentDate": "2025-05-02T14:00"
+  "appointmentDate": "01/05/2025"
 }
 
-### ยกเลิกนัดของช่าง ID = 1
-PUT http://localhost:8080/1/cancel
+### Try booking again for same technician (should return error)
+POST http://localhost:8080/1/book
+Content-Type: application/json
+
+{
+  "appointmentDate": "03/05/2025",
+  "customerName": "Bob"
+}

@@ -30,7 +30,7 @@ public class AppointmentController {
     }
 
     // 1. ค้นหาช่างจากความถนัด
-    @GetMapping("/search/expertise/{expertise}")
+    @GetMapping("/search/{expertise}")
     public List<Technician> findByExpertise(@PathVariable String expertise) {
         return repository.findByExpertiseContainingIgnoreCase(expertise);
     }
@@ -52,28 +52,34 @@ public class AppointmentController {
     }
 
     // 3. จองนัด (ถ้ายังไม่มีนัด)
-    @PostMapping("/{id}/book")
-    public ResponseEntity<String> bookAppointment(@PathVariable Long id, @RequestBody Map<String, String> payload) {
-        Optional<Technician> technicianOpt = repository.findById(id);
-        if (technicianOpt.isEmpty()) return ResponseEntity.notFound().build();
+  @PostMapping("/{id}/book")
+  public ResponseEntity<String> bookAppointment(@PathVariable Long id, @RequestBody Map<String, String> payload) {
+    Optional<Technician> technicianOpt = repository.findById(id);
+    if (technicianOpt.isEmpty()) return ResponseEntity.notFound().build();
 
-        Technician technician = technicianOpt.get();
+    Technician technician = technicianOpt.get();
 
-        if (technician.getAppointmentDate() != null) {
-            return ResponseEntity.badRequest().body("Technician already has an appointment.");
-        }
-
-        String appointmentDate = payload.get("appointmentDate");
-        String customerName = payload.get("customerName");
-
-        if (appointmentDate == null || customerName == null) {
-            return ResponseEntity.badRequest().body("Missing appointmentDate or customerName.");
-        }
-
-        technician.setAppointmentDate(appointmentDate);
-        technician.setCustomerName(customerName);
-        repository.save(technician);
-
-        return ResponseEntity.ok("Appointment booked for " + customerName + " at " + appointmentDate);
+    if (technician.getAppointmentDate() != null) {
+        return ResponseEntity.badRequest().body("Technician already has an appointment.");
     }
+
+    String appointmentDate = payload.get("appointmentDate");
+    String customerName = payload.get("customerName");
+
+    if (appointmentDate == null || customerName == null) {
+        return ResponseEntity.badRequest().body("Missing appointmentDate or customerName.");
+    }
+
+    technician.setAppointmentDate(appointmentDate);
+    technician.setCustomerName(customerName);
+    repository.save(technician);
+
+    return ResponseEntity.ok(
+        "Appointment booked for customer '" + customerName +
+        "' with technician '" + technician.getName() +
+        "' (ID: " + technician.getId() +
+        ") at " + appointmentDate
+    );
+}
+
 }
