@@ -1,5 +1,9 @@
 package assignment2.appointment;
 
+import java.util.ArrayList;
+import java.util.List;
+
+import jakarta.persistence.ElementCollection;
 import jakarta.persistence.Entity;
 import jakarta.persistence.GeneratedValue;
 import jakarta.persistence.Id;
@@ -10,17 +14,28 @@ public class Technician {
     private String name;
     private String phone;
     private String expertise;
-    private String appointmentDate;
-    private String customerName; 
+    @ElementCollection
+    private List<String> appointmentDates = new ArrayList<>();
+    @ElementCollection
+    private List<String> customerNames = new ArrayList<>();
+
 
     Technician() {}
 
-    Technician(String name, String phone, String expertise, String appointmentDate, String customerName) {
-        this.name = name;
-        this.phone = phone;
-        this.expertise = expertise;
-        this.appointmentDate = appointmentDate;
-        this.customerName = customerName;
+    public List<String> getAppointmentDates() {
+        return appointmentDates;
+    }
+
+    public void setAppointmentDates(List<String> appointmentDates) {
+        this.appointmentDates = appointmentDates;
+    }
+
+    public List<String> getCustomerNames() {
+        return customerNames;
+    }
+
+    public void setCustomerNames(List<String> customerNames) {
+        this.customerNames = customerNames;
     }
 
     public Long getId() {
@@ -54,21 +69,11 @@ public class Technician {
     public void setExpertise(String expertise) {
         this.expertise = expertise;
     }
-
-    public String getAppointmentDate() {
-        return appointmentDate;
-    }
-
-    public void setAppointmentDate(String appointmentDate) {
-        this.appointmentDate = appointmentDate;
-    }
-
     
     @Override
     public String toString() {
         return "Technician [id=" + id + ", name=" + name + ", phone=" + phone + ", expertise=" + expertise
-                + ", appointmentDate=" + appointmentDate + ", customerName=" + customerName
-                + "]";
+                + ", appointmentDates=" + appointmentDates + ", customerNames=" + customerNames + "]";
     }
 
     @Override
@@ -79,8 +84,8 @@ public class Technician {
         result = prime * result + ((name == null) ? 0 : name.hashCode());
         result = prime * result + ((phone == null) ? 0 : phone.hashCode());
         result = prime * result + ((expertise == null) ? 0 : expertise.hashCode());
-        result = prime * result + ((appointmentDate == null) ? 0 : appointmentDate.hashCode());
-        result = prime * result + ((customerName == null) ? 0 : customerName.hashCode());
+        result = prime * result + ((appointmentDates == null) ? 0 : appointmentDates.hashCode());
+        result = prime * result + ((customerNames == null) ? 0 : customerNames.hashCode());
         return result;
     }
 
@@ -113,25 +118,28 @@ public class Technician {
                 return false;
         } else if (!expertise.equals(other.expertise))
             return false;
-        if (appointmentDate == null) {
-            if (other.appointmentDate != null)
+        if (appointmentDates == null) {
+            if (other.appointmentDates != null)
                 return false;
-        } else if (!appointmentDate.equals(other.appointmentDate))
+        } else if (!appointmentDates.equals(other.appointmentDates))
             return false;
-        if (customerName == null) {
-            if (other.customerName != null)
+        if (customerNames == null) {
+            if (other.customerNames != null)
                 return false;
-        } else if (!customerName.equals(other.customerName))
+        } else if (!customerNames.equals(other.customerNames))
             return false;
         return true;
     }
 
-    public String getCustomerName() {
-        return customerName;
+    public Technician( String name, String phone, String expertise, List<String> appointmentDates,
+            List<String> customerNames) {
+        this.name = name;
+        this.phone = phone;
+        this.expertise = expertise;
+        this.appointmentDates = appointmentDates;
+        this.customerNames = customerNames;
     }
 
-    public void setCustomerName(String customerName) {
-        this.customerName = customerName;
-    }
+
 
 }
