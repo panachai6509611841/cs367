@@ -1,4 +1,4 @@
-package assignment2.appointment.cilent;
+package assignment2.appointment.client;
 
 import org.springframework.http.HttpMethod;
 import org.springframework.http.ResponseEntity;

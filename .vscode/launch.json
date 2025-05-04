@@ -2,6 +2,41 @@
   "configurations": [
     {
       "type": "java",
+      "name": "CancelAppointment",
+      "request": "launch",
+      "mainClass": "assignment2.appointment.client.CancelAppointment",
+      "projectName": "appointment"
+    },
+    {
+      "type": "java",
+      "name": "GetCustomerLocation",
+      "request": "launch",
+      "mainClass": "assignment2.appointment.client.GetCustomerLocation",
+      "projectName": "appointment"
+    },
+    {
+      "type": "java",
+      "name": "Test1",
+      "request": "launch",
+      "mainClass": "assignment2.appointment.client.Test1",
+      "projectName": "appointment"
+    },
+    {
+      "type": "java",
+      "name": "TEST2Booking",
+      "request": "launch",
+      "mainClass": "dev.panachai.customer.TEST2Booking",
+      "projectName": "customer"
+    },
+    {
+      "type": "java",
+      "name": "TEST1Expertise",
+      "request": "launch",
+      "mainClass": "dev.panachai.customer.TEST1Expertise",
+      "projectName": "customer"
+    },
+    {
+      "type": "java",
       "name": "AppointmentApplication",
       "request": "launch",
       "mainClass": "assignment2.appointment.AppointmentApplication",

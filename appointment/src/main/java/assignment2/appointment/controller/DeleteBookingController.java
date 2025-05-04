@@ -6,7 +6,7 @@ import org.springframework.web.bind.annotation.RequestMapping;
 import org.springframework.web.bind.annotation.RequestParam;
 import org.springframework.web.bind.annotation.RestController;
 
-import assignment2.appointment.cilent.TechnicianClientService;
+import assignment2.appointment.client.TechnicianClientService;
 import assignment2.appointment.repository.AppointmentRepository;
 
 @RestController
