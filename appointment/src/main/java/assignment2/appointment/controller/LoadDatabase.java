@@ -1,10 +1,13 @@
-package assignment2.appointment;
+package assignment2.appointment.controller;
 
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
 import org.springframework.boot.CommandLineRunner;
 import org.springframework.context.annotation.Bean;
 import org.springframework.context.annotation.Configuration;
+
+import assignment2.appointment.model.Technician;
+import assignment2.appointment.repository.AppointmentRepository;
 
 @Configuration
 public class LoadDatabase {

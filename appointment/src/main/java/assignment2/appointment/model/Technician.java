@@ -1,4 +1,4 @@
-package assignment2.appointment;
+package assignment2.appointment.model;
 
 import jakarta.persistence.Entity;
 import jakarta.persistence.GeneratedValue;

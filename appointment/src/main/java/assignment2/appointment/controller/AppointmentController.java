@@ -1,4 +1,4 @@
-package assignment2.appointment;
+package assignment2.appointment.controller;
 
 import java.util.HashSet;
 import java.util.List;
@@ -15,6 +15,9 @@ import org.springframework.web.bind.annotation.PostMapping;
 import org.springframework.web.bind.annotation.RequestBody;
 import org.springframework.web.bind.annotation.RequestParam;
 import org.springframework.web.bind.annotation.RestController;
+
+import assignment2.appointment.model.Technician;
+import assignment2.appointment.repository.AppointmentRepository;
 
 
 @RestController

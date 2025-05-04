@@ -1,8 +1,8 @@
-package assignment2.appointment;
+package assignment2.appointment.cilent;
 
 import org.springframework.web.client.RestTemplate;
 
-public class TEST1Location {
+public class GetCustomerLocation {
     public static void main(String[] args) {
         RestTemplate rest = new RestTemplate();
     
